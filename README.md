@@ -16,7 +16,7 @@ $ chmod +x /usr/local/bin/s3-echoer
 
 ## Use it
 
-### Preparing S3
+### Prepare S3
 
 Make sure the bucket you want to write to exists, for example, let's assume we 
 want to write to a bucket called `s3-echoer-demo`. So first we define the target 
@@ -41,7 +41,7 @@ $ aws s3api create-bucket \
             --region $(aws configure get region)
 ```
 
-### Use `s3-echoer`
+### Use `s3-echoer` from the command line
 
 Now that we've made sure the S3 bucket exists, let's use it:
 
@@ -84,3 +84,7 @@ And it should land in the target bucket ...
 ```
 
 And that's it :)
+
+### Use `s3-echoer` in Kubernetes
+
+TBD.

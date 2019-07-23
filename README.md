@@ -3,10 +3,24 @@
 A simple demo tool that reads input from `stdin` and uploads it to an
 exiting S3 bucket, keyed by the creation timestamp.
 
-Make sure the bucket you want to write to exists, for example, say we want
-to write to a bucket called `s3-echoer-demo`.
+## Install it
 
-Let's first define the target bucket using an environment variable:
+To install `s3-echoer`, execute the following two commands. Download the 
+respective binary for your platform (here shown for `macOS`) and make it executable:
+
+```sh
+$ curl -L https://github.com/mhausenblas/s3-echoer/releases/latest/download/s3-echoer-macos -o /usr/local/bin/s3-echoer
+
+$ chmod +x /usr/local/bin/s3-echoer
+```
+
+## Use it
+
+### Preparing S3
+
+Make sure the bucket you want to write to exists, for example, let's assume we 
+want to write to a bucket called `s3-echoer-demo`. So first we define the target 
+bucket using an environment variable like so:
 
 ```sh
 $ TARGET_BUCKET=s3-echoer-demo
@@ -27,8 +41,9 @@ $ aws s3api create-bucket \
             --region $(aws configure get region)
 ```
 
-OK, now that we've made sure the S3 bucket exists, let's use it. First you need
-to download the binary and put it somewhere on your path. And then do:
+### Use `s3-echoer`
+
+Now that we've made sure the S3 bucket exists, let's use it:
 
 ```sh
 $ s3-echoer $TARGET_BUCKET

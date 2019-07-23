@@ -6,7 +6,7 @@ exiting S3 bucket, keyed by the creation timestamp.
 ## Install it
 
 To install `s3-echoer`, execute the following two commands. Download the 
-respective binary for your platform (here shown for `macOS`) and make it executable:
+respective binary for your platform from the [releases page](https://github.com/mhausenblas/s3-echoer/releases), here shown for `macOS`, and make it executable:
 
 ```sh
 $ curl -L https://github.com/mhausenblas/s3-echoer/releases/latest/download/s3-echoer-macos -o /usr/local/bin/s3-echoer

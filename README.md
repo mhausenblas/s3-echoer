@@ -87,4 +87,28 @@ And that's it :)
 
 ### Use `s3-echoer` in Kubernetes
 
-TBD.
+Create a service account:
+
+```sh
+$ kubectl create sa s3-echoer
+```
+
+Now you can launch the job like so:
+
+```sh
+$ kubectl apply -f s3-echoer-job.yaml
+```
+
+Finally, we jump into the pod and execute `s3-echoer` directly in there:
+
+```sh
+$ JUMPOD=$(kubectl get po -l=job-name=s3-echoer --output=jsonpath={.items[*].metadata.name})
+$ kubectl exec -it $JUMPOD sh
+```
+
+```sh
+sh-4.2# /s3-echoer s3-echoer-demo
+This is an in-cluster test
+Uploading user input to S3 using s3-echoer-demo/s3echoer-1563972036
+```
+Note, above, that in order to trigger the upload to S3 you need to press `ENTER` and then `CTRL+D`.

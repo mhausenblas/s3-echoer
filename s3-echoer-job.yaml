@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: s3-echoer
+spec:
+  template:
+    spec:
+      serviceAccountName: s3-echoer
+      containers:
+      - name: main
+        image: amazonlinux:2018.03
+        command:
+        - "sh"
+        - "-c"
+        - "yum install wget -y && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && pip install awscli --upgrade && wget -O /s3-echoer https://github.com/mhausenblas/s3-echoer/releases/latest/download/s3-echoer-linux && chmod +x /s3-echoer && aws configure set region us-west-2 && sleep 10000"
+      restartPolicy: Never
+

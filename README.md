@@ -106,9 +106,12 @@ $ JUMPOD=$(kubectl get po -l=job-name=s3-echoer --output=jsonpath={.items[*].met
 $ kubectl exec -it $JUMPOD sh
 ```
 
+Once in the container, do:
+
 ```sh
 sh-4.2# /s3-echoer s3-echoer-demo
 This is an in-cluster test
 Uploading user input to S3 using s3-echoer-demo/s3echoer-1563972036
 ```
+
 Note, above, that in order to trigger the upload to S3 you need to press `ENTER` and then `CTRL+D`.

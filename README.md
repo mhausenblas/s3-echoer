@@ -3,6 +3,12 @@
 A simple demo tool that reads input from `stdin` and uploads it to an
 exiting S3 bucket, keyed by the creation timestamp.
 
+- [Install it](#install-it)
+- [Use it](#use-it)
+  - [Prepare S3](#prepare-s3)
+  - [Locally](#locally)
+  - [Kubernetes](#kubernetes) 
+
 ## Install it
 
 To install `s3-echoer`, execute the following two commands. Download the 
@@ -41,7 +47,7 @@ $ aws s3api create-bucket \
             --region $(aws configure get region)
 ```
 
-### Use `s3-echoer` from the command line
+### Locally
 
 Now that we've made sure the S3 bucket exists, let's use it:
 
@@ -85,7 +91,7 @@ And it should land in the target bucket ...
 
 And that's it :)
 
-### Use `s3-echoer` in Kubernetes
+### Kubernetes
 
 Create a service account:
 
@@ -115,3 +121,6 @@ Uploading user input to S3 using s3-echoer-demo/s3echoer-1563972036
 ```
 
 Note, above, that in order to trigger the upload to S3 you need to press `ENTER` and then `CTRL+D`.
+
+From here on you can again use `aws s3api list-objects` and/or `aws s3api get-object` to verify if the write to S3 worked, or, alternatively, use the
+AWS console for this.

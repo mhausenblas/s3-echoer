@@ -12,6 +12,9 @@ spec:
         command:
         - "sh"
         - "-c"
-        - "yum install wget -y && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && pip install awscli --upgrade && wget -O /s3-echoer https://github.com/mhausenblas/s3-echoer/releases/latest/download/s3-echoer-linux && chmod +x /s3-echoer && aws configure set region us-west-2 && sleep 10000"
+        - "curl -sL -o /s3-echoer https://github.com/mhausenblas/s3-echoer/releases/latest/download/s3-echoer-linux && chmod +x /s3-echoer && sleep 10000"
+        env:
+        - name: AWS_DEFAULT_REGION
+          value: "us-west-2" 
       restartPolicy: Never
 

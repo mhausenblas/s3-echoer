@@ -124,4 +124,11 @@ Note, above, that in order to trigger the upload to S3 you need to press `ENTER`
 From here on you can again use `aws s3api list-objects` and/or `aws s3api get-object` to verify if the write to S3 worked, or, alternatively, use the
 AWS console for this.
 
-TBD: permission regime, create role and policy
+Node-level approach (incl. implications):
+
+- determine role of nodes `ROLE_NAME`
+- `aws iam put-role-policy` with write permissions to bucket
+
+Pod-level approach:
+
+TBD

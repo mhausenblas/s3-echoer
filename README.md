@@ -131,4 +131,4 @@ Node-level approach (incl. implications):
 
 Pod-level approach:
 
-TBD
+TBD and also compare and discuss approaches concerning least privileges and attack surface.

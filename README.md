@@ -131,4 +131,6 @@ Node-level approach (incl. implications):
 
 Pod-level approach:
 
+Using IRP as per [#23](https://github.com/aws/containers-roadmap/issues/23) with `arn:aws:iam::aws:policy/AmazonS3FullAccess`
+
 TBD and also compare and discuss approaches concerning least privileges and attack surface.

@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/s3/s3manager"
+	awsv1 "github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	s3managerv1 "github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
@@ -77,7 +78,13 @@ func uploadToS3(bucket, key, payload string) error {
 // it uses https://github.com/aws/aws-sdk-go/releases/tag/v1.21.9 with
 // https://github.com/aws/aws-sdk-go/pull/2667
 func uploadToS3IRP(bucket, key, payload string) error {
-	sess := session.Must(session.NewSession())
+	region := "us-west-2"
+	if regionenv := os.Getenv("AWS_DEFAULT_REGION"); regionenv != "" {
+		region = regionenv
+	}
+	sess := session.Must(session.NewSession(&awsv1.Config{
+		Region: aws.String(region),
+	}))
 	uploader := s3managerv1.NewUploader(sess)
 	_, err := uploader.Upload(&s3managerv1.UploadInput{
 		Bucket: aws.String(bucket),

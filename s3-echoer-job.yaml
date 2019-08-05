@@ -15,6 +15,8 @@ spec:
         - "curl -sL -o /s3-echoer https://github.com/mhausenblas/s3-echoer/releases/latest/download/s3-echoer-linux && chmod +x /s3-echoer && sleep 10000"
         env:
         - name: AWS_DEFAULT_REGION
-          value: "us-west-2" 
+          value: "us-west-2"
+        - name: ENABLE_IRP
+          value: true
       restartPolicy: Never
 

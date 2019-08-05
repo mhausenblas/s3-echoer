@@ -12,7 +12,7 @@ spec:
         command:
         - "sh"
         - "-c"
-        - "curl -sL -o /s3-echoer https://github.com/mhausenblas/s3-echoer/releases/latest/download/s3-echoer-linux && chmod +x /s3-echoer && echo This is an in-cluster test | /s3-echoer s3-echoer-demo"
+        - "curl -sL -o /s3-echoer https://github.com/mhausenblas/s3-echoer/releases/latest/download/s3-echoer-linux && chmod +x /s3-echoer && echo This is an in-cluster test | /s3-echoer TARGET_BUCKET"
         env:
         - name: AWS_DEFAULT_REGION
           value: "us-west-2"

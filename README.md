@@ -71,6 +71,7 @@ $ kubectl create sa s3-echoer
 Now you can launch the job like so:
 
 ```sh
+$ sed -e "s/TARGET_BUCKET/${TARGET_BUCKET}/g" s3-echoer-job.yaml.template > s3-echoer-job.yaml
 $ kubectl apply -f s3-echoer-job.yaml
 ```
 

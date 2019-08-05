@@ -11,6 +11,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/aws/external"
 	"github.com/aws/aws-sdk-go-v2/service/s3/s3manager"
+	"github.com/aws/aws-sdk-go/aws/session"
+	s3managerv1 "github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 func main() {
@@ -28,9 +30,22 @@ func main() {
 		log.Fatalf("Can't read from stdin: %v", err)
 	}
 	fmt.Printf("Uploading user input to S3 using %v/%v\n\n", bucket, key)
-	err = uploadToS3(bucket, key, userinput)
-	if err != nil {
-		log.Fatalf("Can't upload to S3: %v", err)
+
+	irp := false
+	if irpenv := os.Getenv("ENABLE_IRP"); irpenv != "" {
+		irp = true
+	}
+	switch irp {
+	case true:
+		err = uploadToS3IRP(bucket, key, userinput)
+		if err != nil {
+			log.Fatalf("Can't upload to S3: %v", err)
+		}
+	case false:
+		err = uploadToS3(bucket, key, userinput)
+		if err != nil {
+			log.Fatalf("Can't upload to S3: %v", err)
+		}
 	}
 }
 
@@ -51,6 +66,20 @@ func uploadToS3(bucket, key, payload string) error {
 	}
 	uploader := s3manager.NewUploader(cfg)
 	_, err = uploader.Upload(&s3manager.UploadInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+		Body:   strings.NewReader(payload),
+	})
+	return err
+}
+
+// uploadToS3IRP puts the payload into the S3 bucket using the key provided.
+// it uses https://github.com/aws/aws-sdk-go/releases/tag/v1.21.9 with
+// https://github.com/aws/aws-sdk-go/pull/2667
+func uploadToS3IRP(bucket, key, payload string) error {
+	sess := session.Must(session.NewSession())
+	uploader := s3managerv1.NewUploader(sess)
+	_, err := uploader.Upload(&s3managerv1.UploadInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(key),
 		Body:   strings.NewReader(payload),

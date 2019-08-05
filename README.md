@@ -7,7 +7,8 @@ exiting S3 bucket, keyed by the creation timestamp.
 - [Use it](#use-it)
   - [Prepare S3](#prepare-s3)
   - [Locally](#locally)
-  - [Kubernetes](#kubernetes) 
+  - [Kubernetes](#kubernetes)
+  - [Verify S3 write](#verify-s3-write)
 
 ## Install it
 
@@ -59,7 +60,31 @@ CTRL+D
 Uploading user input to S3 using s3-echoer-demo/s3echoer-1563906471
 ```
 
-Now let's check if it landed in the right place:
+### Kubernetes
+
+Create a service account:
+
+```sh
+$ kubectl create sa s3-echoer
+```
+
+Now you can launch the job like so:
+
+```sh
+$ kubectl apply -f s3-echoer-job.yaml
+```
+
+You can check how the job did using:
+
+```sh
+$ kubectl logs job/s3-echoer
+Uploading user input to S3 using s3-echoer-demo/s3echoer-1565024447
+```
+
+
+### Verify S3 write
+
+Now let's check if the data landed in the right place:
 
 ```sh
 $ aws s3api list-objects \
@@ -86,43 +111,13 @@ $ aws s3api get-object \
 $ cat /tmp/s3echoer-readback.txt
 This is a test.
 And it should land in the target bucket ...
-
 ```
 
 And that's it :)
 
-### Kubernetes
+Clean up with `kubectl delete job/s3-echoer`.
 
-Create a service account:
-
-```sh
-$ kubectl create sa s3-echoer
-```
-
-Now you can launch the job like so:
-
-```sh
-$ kubectl apply -f s3-echoer-job.yaml
-```
-
-Finally, we jump into the pod and execute `s3-echoer` directly in there:
-
-```sh
-$ JUMPOD=$(kubectl get po -l=job-name=s3-echoer --output=jsonpath={.items[*].metadata.name})
-$ kubectl exec -it $JUMPOD sh
-```
-
-Once in the container, do the following:
-
-```sh
-sh-4.2# echo This is an in-cluster test | /s3-echoer s3-echoer-demo
-Uploading user input to S3 using s3-echoer-demo/s3echoer-1563972036
-```
-
-Note, above, that in order to trigger the upload to S3 you need to press `ENTER` and then `CTRL+D`.
-
-From here on you can again use `aws s3api list-objects` and/or `aws s3api get-object` to verify if the write to S3 worked, or, alternatively, use the
-AWS console for this.
+## Comparison
 
 Node-level approach (incl. implications):
 

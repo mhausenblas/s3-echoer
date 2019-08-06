@@ -82,6 +82,7 @@ $ kubectl logs job/s3-echoer
 Uploading user input to S3 using s3-echoer-demo/s3echoer-1565024447
 ```
 
+Note: you can clean up with `kubectl delete job/s3-echoer`.
 
 ### Verify S3 write
 
@@ -115,8 +116,6 @@ And it should land in the target bucket ...
 ```
 
 And that's it :)
-
-Clean up with `kubectl delete job/s3-echoer`.
 
 ## Comparison
 

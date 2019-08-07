@@ -119,13 +119,30 @@ And that's it :)
 
 ## Comparison
 
-Node-level approach (incl. implications):
+### Node-level approach
 
 - determine role of nodes `ROLE_NAME`
-- `aws iam put-role-policy` with write permissions to bucket
+- `aws iam put-role-policy` with write permissions (`arn:aws:iam::aws:policy/AmazonS3FullAccess`) to bucket
 
-Pod-level approach:
+### Pod-level approach
 
-Using IRP as per [#23](https://github.com/aws/containers-roadmap/issues/23) with `arn:aws:iam::aws:policy/AmazonS3FullAccess`
+Using IRP as per [#23](https://github.com/aws/containers-roadmap/issues/23) with
+ `arn:aws:iam::aws:policy/AmazonS3FullAccess` and `sts:assume-role-with-web-identity`,
+either via using an [IRP-enabled SDK](https://github.com/aws/aws-sdk-go/releases/tag/v1.21.9) 
+or manually with:
 
-TBD and also compare and discuss approaches concerning least privileges and attack surface.
+```sh
+$ JQ=/usr/bin/jq && curl https://stedolan.github.io/jq/download/linux64/jq > $JQ && chmod +x $JQ
+$ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python get-pip.py && pip install awscli --upgrade
+$ aws sts assume-role-with-web-identity \
+          --role-arn $AWS_ROLE_ARN \
+          --role-session-name mh9test \
+          --web-identity-token file://$AWS_WEB_IDENTITY_TOKEN_FILE \
+          --duration-seconds 1000 > /tmp/irp-cred.txt
+$ export AWS_ACCESS_KEY_ID="$(cat /tmp/irp-cred.txt | jq -r ".Credentials.AccessKeyId")"
+$ export AWS_SECRET_ACCESS_KEY="$(cat /tmp/irp-cred.txt | jq -r ".Credentials.SecretAccessKey")"
+$ export AWS_SESSION_TOKEN="$(cat /tmp/irp-cred.txt | jq -r ".Credentials.SessionToken")"
+$ rm /tmp/irp-cred.txt
+```
+
+TBD: compare and discuss approaches concerning least privileges and attack surface.

@@ -179,14 +179,15 @@ $ aws s3api list-objects \
 [
     {
         "Key": "s3echoer-1563907403",
-        "Size": 63
+        "Size": 27
     }
 ]
 ```
 
 Yay, that worked like a charm! Seems an S3 object with our content has been 
 created, in the target bucket. And as a final check, let's download the object
-and store it in a file to check if it actually contains the text we entered, above:
+and store it in a file to check if it actually contains the text the Kubernetes
+job created:
 
 ```sh
 $ aws s3api get-object \

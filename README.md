@@ -3,27 +3,12 @@
 A simple demo tool that reads input from `stdin` and uploads it to an
 exiting S3 bucket, keyed by the creation timestamp.
 
-- [Install it](#install-it)
-- [Use it](#use-it)
-  - [Prepare S3](#prepare-s3)
-  - [Locally](#locally)
-  - [Kubernetes](#kubernetes)
-  - [Verify S3 write](#verify-s3-write)
+- [Prepare S3 bucket](#prepare-s3-bucket)
+- [Use it locally](#locally)
+- [Use it in Kubernetes](#kubernetes)
+- [Verify S3 write](#verify-s3-write)
 
-## Install it
-
-To install `s3-echoer`, execute the following two commands. Download the 
-respective binary for your platform from the [releases page](https://github.com/mhausenblas/s3-echoer/releases), here shown for `macOS`, and make it executable:
-
-```sh
-$ curl -L https://github.com/mhausenblas/s3-echoer/releases/latest/download/s3-echoer-macos -o /usr/local/bin/s3-echoer
-
-$ chmod +x /usr/local/bin/s3-echoer
-```
-
-## Use it
-
-### Prepare S3
+## Prepare S3 bucket
 
 Make sure the bucket you want to write to exists, for example, let's assume we 
 want to write to a bucket called `s3-echoer-demo`. So first we define the target 
@@ -48,9 +33,23 @@ $ aws s3api create-bucket \
             --region $(aws configure get region)
 ```
 
-### Locally
+## Locally
 
-Now that we've made sure the S3 bucket exists, let's use it:
+### Install it
+
+To install `s3-echoer` locally, execute the following two commands. Download the 
+respective binary for your platform from the [releases page](https://github.com/mhausenblas/s3-echoer/releases), 
+here shown for `macOS`, and make it executable:
+
+```sh
+$ curl -L https://github.com/mhausenblas/s3-echoer/releases/latest/download/s3-echoer-macos -o /usr/local/bin/s3-echoer
+
+$ chmod +x /usr/local/bin/s3-echoer
+```
+
+### Use it
+
+To write to the S3 bucket from your local machine, use `s3-echoer` as follows:
 
 ```sh
 $ s3-echoer $TARGET_BUCKET
@@ -60,13 +59,13 @@ CTRL+D
 Uploading user input to S3 using s3-echoer-demo/s3echoer-1563906471
 ```
 
-### Kubernetes
+## Kubernetes
 
 Running `s3-echoer` in-cluster means that we somehow need to give it the 
 permission to write to S3. There are two approaches to this: granting the node 
 the pod runs on the permission or granting the pod the permission, directly.
 
-#### Node-level approach
+### Node-level approach
 
 With the node-level approach, we grant all nodes the permission to write to S3.
 For this, we need to look up the respective role and attach the `AmazonS3FullAccess` 
@@ -110,7 +109,7 @@ principle.
 
 We can do better with the pod-level approach.
 
-#### Pod-level approach
+### Pod-level approach
 
 Using IAM roles for service accounts (IRSA) as per [#23](https://github.com/aws/containers-roadmap/issues/23) 
 we can grant individual apps certain permissions. Let's do that for our case.
@@ -169,7 +168,7 @@ Uploading user input to S3 using s3-echoer-demo/s3echoer-1565024447
 
 Note: you can clean up with `kubectl delete job/s3-echoer`.
 
-### Verify S3 write
+## Verify S3 write
 
 Let's check if the data landed in the right place:
 

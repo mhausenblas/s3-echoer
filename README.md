@@ -11,8 +11,7 @@ exiting S3 bucket, keyed by the creation timestamp.
 ## Prepare S3 bucket
 
 Make sure the bucket you want to write to exists, for example, let's assume we 
-want to write to a bucket called `s3-echoer-demo`. So first we define the target 
-bucket using an environment variable like so:
+want to write to a bucket called `s3-echoer-demo`. So first we define the target bucket using an environment variable like so:
 
 ```sh
 $ TARGET_BUCKET=s3-echoer-demo
@@ -114,8 +113,7 @@ We can do better with the pod-level approach.
 Using IAM roles for service accounts (IRSA) as per [#23](https://github.com/aws/containers-roadmap/issues/23) 
 we can grant individual apps certain permissions. Let's do that for our case.
 
-Again, assuming the EKS cluster named `s3echoer` was provisioned with `eksctl`,
-we first enable IRSA in the cluster like so:
+Again, assuming the EKS cluster named `s3echoer` was provisioned with `eksctl` in version [0.5.0](https://github.com/weaveworks/eksctl/releases/tag/0.5.0) or above, we first enable IRSA in the cluster like so:
 
 ```sh
 $ eksctl utils associate-iam-oidc-provider --name s3echoer --approve
